@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path="docker-compose.yml" />
+  </Folder>
+  <Project Path="CourseEditor.Application/CourseEditor.Application.csproj" />
+  <Project Path="courseeditor.client/courseeditor.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="CourseEditor.Domain/CourseEditor.Domain.csproj" />
+  <Project Path="CourseEditor.Infrastructure/CourseEditor.Infrastructure.csproj" />
+  <Project Path="CourseEditor.Server/CourseEditor.Server.csproj" />
+</Solution>
