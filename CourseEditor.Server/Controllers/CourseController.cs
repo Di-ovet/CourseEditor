@@ -37,8 +37,13 @@ public class CoursesController : ControllerBase
     }
 
     [HttpPost("delete/{id}")]
-    public async Task<IActionResult> Delete(int id, [FromBody] CreateCourseDto dto)
-    {        
+    public async Task<IActionResult> Delete(Guid id, [FromBody] CreateCourseDto dto)
+    {
+        var course = await _db.Courses.FindAsync(id);
+        if (course == null) return NotFound(); 
+
+        _db.Courses.Remove(course);
+        await _db.SaveChangesAsync();
         return Ok();
     }
 
@@ -61,7 +66,6 @@ public class CoursesController : ControllerBase
 
         return Ok(course);
     }
-
 
     [HttpGet("getmodules/{id}")]
     public async Task<IActionResult> GetModules(Guid id)
@@ -86,6 +90,7 @@ public class CoursesController : ControllerBase
 
         return Ok(lessons);
     }
+
     [HttpPost("createmodule/{id}")]
     public async Task<IActionResult> CreateModule([FromBody] CreateModuleDto dto)
     {
@@ -94,17 +99,37 @@ public class CoursesController : ControllerBase
         await _db.SaveChangesAsync();
         return Ok(module.Id);
     }
-    [HttpPost("editmodule/{id}")]
-    public async Task<IActionResult> EditModule(Guid id, [FromBody] string newTitle)
+    [HttpPost("createlesson/{moduleId}")]
+    public async Task<IActionResult> CreateLesson(Guid moduleId, [FromBody] CreateLessonDto dto)
     {
+        var lessons = await _db.Lessons
+            .Select(m => new { m.Id, m.ModuleId, m.Title, m.OrderIndex })
+            .Where(m => m.ModuleId.Equals(moduleId))
+            .ToListAsync();
+        if (dto.OrderIndex < 0 || dto.OrderIndex > lessons.Count) dto.OrderIndex = lessons.Count;
+        if (dto.Title == "") dto.Title = "Новый урок"; 
+        
+        var lesson = new Lesson(moduleId, dto.Title, dto.OrderIndex);
+        _db.Lessons.Add(lesson);
+        await _db.SaveChangesAsync();
+        return Ok(lesson);
+    }
+
+    [HttpPost("editmodule/{id}")]
+    public async Task<IActionResult> EditModule(Guid id, [FromBody] UpdateModuleDto? dto)
+    {
+        if (dto == null || string.IsNullOrWhiteSpace(dto.Title))
+            return BadRequest("Title is required.");
+
         var module = await _db.Modules.FindAsync(id);
         if (module == null) return NotFound();
-        
-        module.UpdateTitle(newTitle);
+
+        module.UpdateTitle(dto.Title);
         await _db.SaveChangesAsync();
-        
+
         return Ok(module);
     }
+
     [HttpPost("movemodule/{id}")]
     public async Task<IActionResult> MoveModule(Guid id, [FromBody] int newOrderIndex)
     {
@@ -124,6 +149,15 @@ public class CoursesController : ControllerBase
         return Ok();
     }
 
+    [HttpDelete("deletemodule/{id}")]
+    public async Task<IActionResult> DeleteModule(Guid id)
+    {
+        var module = await _db.Modules.FindAsync(id);
+        if (module == null) return NotFound();
+        _db.Modules.Remove(module);
+        await _db.SaveChangesAsync();
+        return Ok();
+    }
     public class CreateCourseDto
     {
         public string? Title { get; set; }
@@ -134,5 +168,16 @@ public class CoursesController : ControllerBase
         public Guid CourseId { get; set; }
         public string? Title { get; set; }
         public int OrderIndex { get; set; }
+    }
+    public class CreateLessonDto
+    {
+        public string? Title { get; set; }
+        public int OrderIndex { get; set; }
+    }
+
+    // Новый DTO для редактирования модуля
+    public class UpdateModuleDto
+    {
+        public string? Title { get; set; }
     }
 }

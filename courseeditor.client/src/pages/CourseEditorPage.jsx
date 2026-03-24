@@ -9,22 +9,17 @@ import "../styles.css";
 import { useLocation, useParams } from "react-router-dom";
 
 function CourseEditorPage() {
-  // read course from location state (pushed by CourseCard).  fall back
-  // to server fetch when state is missing or after a full reload.
   const location = useLocation();
   const { courseId } = useParams();
 
   const [course, setCourse] = useState(location.state?.course || null);
-  // track editable/text description values and dirty flag
+
   const [editText, setEditText] = useState(course?.title || "");
   const [editDescription, setEditDescription] = useState(
     course?.description || "",
   );
   const [modules, setModules] = useState([]);
-  // compute dirty flag instead of storing it in state
-  // (derived from course and editable fields)
 
-  // helper for loading course data from API and initializing edit fields
   const fetchCourseData = useCallback(async () => {
     try {
       const data = await getCourse(courseId);
@@ -36,15 +31,13 @@ function CourseEditorPage() {
     }
   }, [courseId]);
 
-  // load course when we don't have it or when the id changes
   useEffect(() => {
-    if (course && course.id === courseId) return; // already have correct course
+    if (course && course.id === courseId) return;
     (async () => {
       await fetchCourseData();
     })();
   }, [courseId, course, fetchCourseData]);
 
-  // reload modules whenever we have a course (initial load or after refresh)
   useEffect(() => {
     if (!course?.id) return;
 
@@ -66,21 +59,18 @@ function CourseEditorPage() {
   };
 
   const enterEdit = async (e) => {
-    // send the updated title/description
     try {
       await setNewCourseTitle(course.id, editText, editDescription);
       console.log("title saved");
 
-      // re-fetch course data from server to keep everything in sync
       await fetchCourseData();
     } catch (err) {
       console.error("failed to save title", err);
     }
-    // if called from an event, restore readOnly state
+
     if (e && e.target) stopEdit(e);
   };
 
-  // compute dirty flag based on current values
   const isDirty = useMemo(
     () =>
       !!course &&
@@ -89,14 +79,13 @@ function CourseEditorPage() {
     [editText, editDescription, course],
   );
 
-  // prompt on unload if there is unsaved data
   useEffect(() => {
     const handler = (e) => {
       if (!isDirty) return;
       e.preventDefault();
-      // standard message will be shown in most browsers
+
       e.returnValue =
-        "You have unsaved changes. Are you sure you want to leave?";
+        "Остались несохранённые изменения. Вы уверены, что хотите покинуть страницу?";
     };
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
@@ -111,7 +100,7 @@ function CourseEditorPage() {
           readOnly
           id="titlecore"
           className="course-title"
-          placeholder="Enter course title"
+          placeholder="Введите название курса"
           value={editText}
           onDoubleClick={startEdit}
           onBlur={stopEdit}
@@ -123,7 +112,7 @@ function CourseEditorPage() {
           readOnly
           id="descriptioncore"
           className="course-description"
-          placeholder="Enter course description"
+          placeholder="Введите описание курса"
           value={editDescription}
           defaultValue={course?.description}
           onDoubleClick={startEdit}

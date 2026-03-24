@@ -1,4 +1,8 @@
-﻿namespace CourseEditor.Domain.Entities
+﻿using CourseEditor.Domain.Enums;
+using System.Net.NetworkInformation;
+using System.Reflection;
+
+namespace CourseEditor.Domain.Entities
 {
     public class Module
     {
@@ -38,6 +42,24 @@
             _lessons.Add(lesson);
 
             return lesson;
+        }
+        public void MoveLesson(Guid lessonId, int newIndex)
+        {
+            var lesson = _lessons.Find(m => m.Id == lessonId);
+            if (lesson == null)
+                throw new InvalidOperationException();
+
+            _lessons.Remove(lesson);
+
+            if (newIndex < 0) newIndex = 0;
+            if (newIndex > _lessons.Count) newIndex = _lessons.Count;
+
+            _lessons.Insert(newIndex, lesson);
+
+            for (int i = 0; i < _lessons.Count; i++)
+            {
+                _lessons[i].UpdateOrderIndex(i);
+            }
         }
     }
 }

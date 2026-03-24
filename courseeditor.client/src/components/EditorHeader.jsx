@@ -1,10 +1,13 @@
 import "../styles.css";
+import { Link } from "react-router-dom";
 
 function EditorHeader({ onSave, onRun }) {
   return (
     <div className="editor-header">
       <div className="editor-header-left">
-        <button className="back-button">← Назад</button>
+        <Link to="/" className="back-button">
+          ← Назад
+        </Link>
       </div>
 
       <div className="editor-header-center">

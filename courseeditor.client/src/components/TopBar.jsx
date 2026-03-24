@@ -1,37 +1,44 @@
-import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo_head_1.png";
 import "../styles.css";
 
 function TopBar() {
   return (
     <Navbar expand="lg" className="navbar">
-      <Container>
-        <Navbar.Brand id="basic-dropdown" href="#home">
-          {/* placeholder logo; swap src when real asset available */}
-          <img src="/logo-placeholder.png" alt="Brand" className="brand-logo" />
+      <div className="nav-container">
+        <Navbar.Brand as={Link} to="/">
+          <img src={logo} alt="Валуйский колледж" className="brand-logo" />
         </Navbar.Brand>
-        <Nav className="navbar">
-          <Nav.Link href="#Home" id="basic-dropdown" className="navbar-link">
-            Курсы
-          </Nav.Link>
-          <Nav.Link href="#About" id="basic-dropdown" className="navbar-link">
-            Уроки
-          </Nav.Link>
-          <Nav.Link href="#About" id="basic-dropdown" className="navbar-link">
-            Проверка заданий
-          </Nav.Link>
-          <NavDropdown title="Профиль" id="basic-dropdown">
-            <NavDropdown.Item href="#ChangeMode">
-              Изменить режим
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#Profile">Личный кабинет</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#Logout">Выйти</NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
-      </Container>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="nav-links">
+            <Nav.Link as={Link} to="/" className="nav-link">
+              Курсы
+            </Nav.Link>
+            <Nav.Link href="#About" className="nav-link">
+              Уроки
+            </Nav.Link>
+            <Nav.Link href="#About" className="nav-link">
+              Проверка заданий
+            </Nav.Link>
+          </Nav>
+          <Nav>
+            <NavDropdown title="Профиль" className="basic-dropdown">
+              <NavDropdown.Item href="#ChangeMode">
+                Изменить режим
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#Profile">
+                Личный кабинет
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#Logout">Выйти</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </div>
     </Navbar>
   );
 }

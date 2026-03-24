@@ -9,7 +9,7 @@ namespace CourseEditor.Domain.Entities
 
         public ElementType ElementType { get; private set; }
 
-        public string Data { get; private set; }
+        public string Data { get; private set; } 
 
         public int OrderIndex { get; private set; }
 
@@ -23,5 +23,15 @@ namespace CourseEditor.Domain.Entities
             Data = data;
             OrderIndex = order;
         }
+
+        public void UpdateData(string data)
+        {
+            Data = data;
+        }
+        public void UpdateOrderIndex(int order)
+        {
+            OrderIndex = order;
+        }
+
     }
 }

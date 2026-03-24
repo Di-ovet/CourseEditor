@@ -23,15 +23,16 @@ function HomePage() {
   };
 
   return (
-    <div className="home">
+    <div className="home-header">
       <TopBar />
-      <div className="course-grid">
-        {(courses ?? []).map((c) => (
-          <CourseCard key={c.id} course={c} />
-        ))}
+      <div className="home">
+        <div className="course-grid">
+          {(courses ?? []).map((c) => (
+            <CourseCard key={c.id} course={c} />
+          ))}
+        </div>
+        <CreateCourseButton onCreated={handleCourseCreated} />
       </div>
-
-      <CreateCourseButton onCreated={handleCourseCreated} />
     </div>
   );
 }

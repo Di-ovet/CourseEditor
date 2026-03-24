@@ -23,7 +23,8 @@ export async function getModules(courseId) {
 }
 export async function createCourse() {
   const res = await axios.post(`${API}/create`, {
-    title: "Untitled course",
+    title: "Новый курс",
+    description: "Описание нового курса",
   });
 
   return res.data;
@@ -31,7 +32,7 @@ export async function createCourse() {
 export async function createModule(courseId, OrderIndex = 0) {
   const res = await axios.post(`${API}/createmodule/${courseId}`, {
     courseId: courseId,
-    title: "Untitled module",
+    title: "Новый модуль",
     order: OrderIndex,
   });
 
@@ -44,8 +45,30 @@ export async function getLessons(moduleId) {
 
 export async function setNewCourseTitle(courseId, newTitle, newDescription) {
   const res = await axios.post(`${API}/edit/${courseId}`, {
-    title: newTitle,
+    courseId,
+    Title: newTitle,
     description: newDescription,
+  });
+  return res.data;
+}
+
+export async function moveModule(moduleId, newOrderIndex) {
+  const res = await axios.post(`${API}/movemodule/${moduleId}`, newOrderIndex);
+  return res.data;
+}
+
+export async function editModule(moduleId, newtitle) {
+  const res = await axios.post(`${API}/editmodule/${moduleId}`, {
+    id: moduleId,
+    Title: newtitle,
+  });
+  return res.data;
+}
+
+export async function createLesson(moduleId, title = "", order = 0) {
+  const res = await axios.post(`${API}/createlesson/${moduleId}`, {
+    title,
+    order,
   });
   return res.data;
 }
