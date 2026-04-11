@@ -3,10 +3,18 @@ import CreateLessonButton from "./CreateLessonButton";
 import EditableTextBox from "../EditableTextBox";
 import { getLessons, editModule } from "../../api/courses";
 import { useEffect, useState } from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 function ModuleCard({ module }) {
   const [lessons, setLessons] = useState([]);
   const [title, setTitle] = useState(module.title);
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: module.id });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   useEffect(() => {
     async function fetchLessons() {
@@ -33,10 +41,11 @@ function ModuleCard({ module }) {
   };
 
   return (
-    <div className="module">
+    <div ref={setNodeRef} style={style} className="module-card">
       <div className="module-header">
         <EditableTextBox
           text={title}
+          className="module-title-input"
           onInput={(e) => setTitle(e.target.value)}
           onEnter={saveTitle}
           onBlur={saveTitle}
@@ -44,8 +53,10 @@ function ModuleCard({ module }) {
 
         <div className="module-tools">Уроки: {lessons.length}</div>
       </div>
-
-      <LessonList lessons={lessons} />
+      <div className="drag-handle" {...attributes} {...listeners}>
+        ⋮⋮
+      </div>
+      <LessonList lessons={lessons} setLessons={setLessons} />
 
       <CreateLessonButton
         moduleId={module.id}

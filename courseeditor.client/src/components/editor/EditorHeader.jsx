@@ -1,4 +1,4 @@
-import "../styles.css";
+import "../../styles.css";
 import { Link } from "react-router-dom";
 
 function EditorHeader({ onSave, onRun }) {

@@ -1,4 +1,4 @@
-import EditorHeader from "../components/EditorHeader.jsx";
+import EditorHeader from "../components/editor/EditorHeader.jsx";
 import ModuleList from "../components/editor/ModuleList.jsx";
 import CreateModuleButton from "../components/editor/CreateModuleButton";
 import { useEffect, useState, useMemo, useCallback } from "react";
@@ -38,17 +38,20 @@ function CourseEditorPage() {
     })();
   }, [courseId, course, fetchCourseData]);
 
-  useEffect(() => {
+  const fetchModules = useCallback(async () => {
     if (!course?.id) return;
-
-    async function fetchModules() {
+    try {
       const data = await getModules(course.id);
       console.log("modules:", data);
       setModules(data ?? []);
+    } catch (err) {
+      console.error("failed to fetch modules", err);
     }
+  }, [course?.id]);
 
+  useEffect(() => {
     fetchModules();
-  }, [course]);
+  }, [fetchModules]);
 
   const startEdit = (e) => {
     e.target.removeAttribute("readOnly");
@@ -119,13 +122,12 @@ function CourseEditorPage() {
           onBlur={stopEdit}
           onInput={(e) => setEditDescription(e.target.value)}
         />
-        <ModuleList modules={modules} />
+        <ModuleList modules={modules} setModules={setModules} />
 
         <CreateModuleButton
           courseId={course?.id}
-          onCreated={(newModule) => {
-            setModules((prev) => [...prev, newModule]);
-          }}
+          moduleCount={modules.length}
+          onCreated={fetchModules}
         />
       </div>
     </div>

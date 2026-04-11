@@ -20,7 +20,7 @@ public class CoursesController : ControllerBase
         var course = new Course(dto.Title, dto.Description);
         _db.Courses.Add(course);
         await _db.SaveChangesAsync();
-        return Ok(course.Id);
+        return Ok(course);
     }
 
     [HttpPost("edit/{id}")]
@@ -143,6 +143,24 @@ public class CoursesController : ControllerBase
         if (course == null) return NotFound();
 
         course.MoveModule(id, newOrderIndex);
+
+        await _db.SaveChangesAsync();
+
+        return Ok();
+    }
+    [HttpPost("movelesson/{id}")]
+    public async Task<IActionResult> MoveLesson(Guid id, [FromBody] int newOrderIndex)
+    {
+        var lesson = await _db.Lessons.FindAsync(id);
+        if (lesson == null) return NotFound();
+
+        var module = await _db.Modules
+            .Include(m => m.Lessons)
+            .FirstOrDefaultAsync(m => m.Id == lesson.ModuleId);
+
+        if (module == null) return NotFound();
+
+        module.MoveLesson(id, newOrderIndex);
 
         await _db.SaveChangesAsync();
 

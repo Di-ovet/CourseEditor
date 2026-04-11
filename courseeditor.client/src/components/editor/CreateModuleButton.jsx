@@ -1,13 +1,16 @@
 import { createModule } from "../../api/courses";
 
-function CreateModuleButton({ courseId, onCreated }) {
+function CreateModuleButton({ courseId, onCreated, moduleCount = 0 }) {
   const handleCreateModule = async () => {
     if (!courseId) return; // nothing we can do without a course
 
-    // compute default order index if caller hasn't provided one
-    const newModule = await createModule(courseId);
-    if (onCreated) {
-      onCreated(newModule);
+    try {
+      await createModule(courseId, moduleCount);
+      if (onCreated) {
+        onCreated(); // refetch modules
+      }
+    } catch (err) {
+      console.error("failed to create module", err);
     }
   };
 
