@@ -2,8 +2,8 @@
 {
     public enum ElementType
     {
-        Text,
-        Media,
+        Text,  
+        Image,
         Input,
         FileUpload,
         Quiz,

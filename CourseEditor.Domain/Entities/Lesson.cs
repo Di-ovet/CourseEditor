@@ -12,8 +12,8 @@ namespace CourseEditor.Domain.Entities
         public int OrderIndex { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
-        private readonly List<LessonElement> _pages = new();
-        public IReadOnlyCollection<LessonElement> Lessons => _pages;
+        private readonly List<LessonPage> _pages = new();
+        public IReadOnlyCollection<LessonPage> Pages => _pages;
 
         protected Lesson() { }
 
@@ -37,10 +37,10 @@ namespace CourseEditor.Domain.Entities
         {
             Title = newTitle;
         }
-        public LessonElement AddPage(Guid id, ElementType elementType = ElementType.Text)
+        public LessonPage AddPage(Guid id, string title)
         {
 
-            var page = new LessonElement(id, elementType, "", _pages.Count);
+            var page = new LessonPage(id, title, _pages.Count);
 
             _pages.Add(page);
 

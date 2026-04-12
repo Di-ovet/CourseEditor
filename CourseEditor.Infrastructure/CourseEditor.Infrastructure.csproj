@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CourseEditor.Application\CourseEditor.Application.csproj" />
     <ProjectReference Include="..\CourseEditor.Domain\CourseEditor.Domain.csproj" />
   </ItemGroup>
 

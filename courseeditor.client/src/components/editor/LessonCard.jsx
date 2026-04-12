@@ -5,7 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 function LessonCard({ lesson }) {
   const navigate = useNavigate();
   const openLessonEditor = () => {
-    navigate(`/lesson/${lesson.id}`);
+    navigate(`/lesson/${lesson.id}`, { state: { lesson } });
   };
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useSortable({ id: lesson.id });
@@ -16,17 +16,20 @@ function LessonCard({ lesson }) {
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="lesson-item"
-      onClick={openLessonEditor}
-    >
-      <div className="lesson-title">{lesson.title || "Без названия"}</div>
+    <div className="lesson-item">
+      <div
+        className="lesson-title"
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+      >
+        {lesson.title || "Без названия"}
+      </div>
 
-      <button className="edit-btn">Редактировать</button>
+      <button className="edit-btn" onClick={() => openLessonEditor(lesson)}>
+        Редактировать
+      </button>
     </div>
   );
 }

@@ -1,15 +1,17 @@
 ﻿using CourseEditor.Domain.Entities;
 using CourseEditor.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CourseEditor.Application;
 
 [ApiController]
 [Route("api/courses")]
-public class CoursesController : ControllerBase
+public class CourseController : ControllerBase
 {
     private readonly AppDbContext _db;
 
-    public CoursesController(AppDbContext db)
+    public CourseController(AppDbContext db)
     {
         _db = db;
     }
@@ -116,7 +118,7 @@ public class CoursesController : ControllerBase
     }
 
     [HttpPost("editmodule/{id}")]
-    public async Task<IActionResult> EditModule(Guid id, [FromBody] UpdateModuleDto? dto)
+    public async Task<IActionResult> EditModule(Guid id, [FromBody] UpdateTitleDto? dto)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.Title))
             return BadRequest("Title is required.");
@@ -176,26 +178,5 @@ public class CoursesController : ControllerBase
         await _db.SaveChangesAsync();
         return Ok();
     }
-    public class CreateCourseDto
-    {
-        public string? Title { get; set; }
-        public string? Description { get; set; }
-    }
-    public class CreateModuleDto
-    {
-        public Guid CourseId { get; set; }
-        public string? Title { get; set; }
-        public int OrderIndex { get; set; }
-    }
-    public class CreateLessonDto
-    {
-        public string? Title { get; set; }
-        public int OrderIndex { get; set; }
-    }
 
-    // Новый DTO для редактирования модуля
-    public class UpdateModuleDto
-    {
-        public string? Title { get; set; }
-    }
 }

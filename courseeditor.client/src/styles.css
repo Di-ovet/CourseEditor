@@ -3,6 +3,18 @@ body {
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Hide scrollbars */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .home-header {
   padding: 0;
   background: #f6f8fc;
@@ -419,4 +431,253 @@ body {
 
 .header-btn.primary:hover {
   background: #1f5ce0;
+}
+
+/* page list styles */
+.editor-container {
+  margin-top: 64px; /* because Navbar is fixed */
+}
+
+.left-panel,
+.right-panel {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  background: #f6f8fc;
+  padding: 12px;
+}
+
+.main-editor {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  padding: 24px;
+  background: #f6f8fc;
+}
+
+/* element styles */
+.page-style {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.page-header {
+  border-bottom: 2px solid #e6ebf5;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #1b2430;
+  font-size: 24px;
+}
+
+.element-text,
+.element-image {
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+  background: #f9fafb;
+}
+
+.element-text:hover,
+.element-image:hover {
+  border-color: #d0d8e8;
+  background: #f0f4ff;
+}
+
+.element-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 2px solid #2d6df6;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.element-image-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.element-image-edit input {
+  padding: 8px 12px;
+  border: 1px solid #d0d8e8;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.element-image-edit input:focus {
+  outline: none;
+  border-color: #2d6df6;
+  box-shadow: 0 0 0 3px rgba(45, 109, 246, 0.1);
+}
+
+.element-image img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.element-text p,
+.element-image p {
+  margin: 0;
+  color: #1f2933;
+  line-height: 1.5;
+}
+
+/* Lesson Editor Styles */
+.lesson-editor-container {
+  height: 100vh;
+  background: #f6f8fc;
+  padding: 0 !important;
+}
+
+.lesson-left-panel,
+.lesson-right-panel {
+  overflow-y: auto;
+  background: white;
+  padding: 16px;
+  border-right: 1px solid #e6ebf5;
+}
+
+.lesson-right-panel {
+  border-right: none;
+  border-left: 1px solid #e6ebf5;
+}
+
+.lesson-main-editor {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px;
+  background: #f6f8fc;
+}
+
+.lesson-editor-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.lesson-title-section {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.lesson-title-input {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1b2430;
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  width: 100%;
+}
+
+.lesson-title-input:read-only {
+  cursor: default;
+}
+
+.lesson-title-input:not(:read-only) {
+  background: #f0f4ff !important;
+  border: 1px solid #d0d8e8 !important;
+}
+
+.lesson-title-input:focus {
+  outline: none;
+  background: #ffffff !important;
+  border: 2px solid #2d6df6 !important;
+}
+
+.pages-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* page list styles */
+.page-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.page-style {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.page-header {
+  border-bottom: 2px solid #e6ebf5;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #1b2430;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+/* element styles */
+.element-wrapper {
+  position: relative;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.element-wrapper:hover .element-options-btn {
+  opacity: 1;
+}
+
+.element-options-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #6b6bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: grab;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-weight: bold;
+}
+
+.element-options-btn:active {
+  cursor: grabbing;
+}
+
+.element-options-btn:hover {
+  background: #5757d9;
+}
+
+.element-text,
+.element-image {
+  width: 100%;
 }

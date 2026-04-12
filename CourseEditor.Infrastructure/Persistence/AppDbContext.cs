@@ -8,6 +8,7 @@ namespace CourseEditor.Infrastructure.Persistence
         public DbSet<Course> Courses => Set<Course>();
         public DbSet<Module> Modules => Set<Module>();
         public DbSet<Lesson> Lessons => Set<Lesson>();
+        public DbSet<LessonPage> LessonPages => Set<LessonPage>();
         public DbSet<LessonElement> LessonElements => Set<LessonElement>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

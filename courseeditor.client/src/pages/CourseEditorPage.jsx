@@ -43,9 +43,11 @@ function CourseEditorPage() {
     try {
       const data = await getModules(course.id);
       console.log("modules:", data);
-      setModules(data ?? []);
+      // Ensure data is always an array
+      setModules(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("failed to fetch modules", err);
+      setModules([]);
     }
   }, [course?.id]);
 

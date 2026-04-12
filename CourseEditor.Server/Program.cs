@@ -1,3 +1,4 @@
+using CourseEditor.Application;
 using CourseEditor.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IElementRepository, ElementRepository>();
+builder.Services.AddScoped<IElementDataSerializer, JsonElementSerializer>();
+builder.Services.AddScoped<ElementService>();
+
 
 // Add controllers
 builder.Services.AddControllers();

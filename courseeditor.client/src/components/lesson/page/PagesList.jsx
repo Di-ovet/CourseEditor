@@ -1,15 +1,15 @@
-import ModuleCard from "./ModuleCard";
+import LessonPage from "./LessonPage";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { moveModule } from "../../api/courses";
+import { movePage } from "../../../api/lessons";
 
-function ModuleList({ modules, setModules }) {
-  // Ensure modules is always an array
-  const modulesList = Array.isArray(modules) ? modules : [];
+function PagesList({ pages, setPages }) {
+  // Ensure pages is always an array
+  const pagesList = Array.isArray(pages) ? pages : [];
 
   const handleDragEnd = async (event) => {
     const { active, over } = event;
@@ -23,34 +23,34 @@ function ModuleList({ modules, setModules }) {
 
     if (active.id === over.id) return;
 
-    const oldIndex = modulesList.findIndex((m) => m.id === active.id);
-    const newIndex = modulesList.findIndex((m) => m.id === over.id);
+    const oldIndex = pagesList.findIndex((p) => p.id === active.id);
+    const newIndex = pagesList.findIndex((p) => p.id === over.id);
 
     if (oldIndex === -1 || newIndex === -1) {
       console.log("Index not found", { oldIndex, newIndex });
       return;
     }
 
-    const newModules = arrayMove(modulesList, oldIndex, newIndex);
+    const newPages = arrayMove(pagesList, oldIndex, newIndex);
 
-    setModules(newModules);
+    setPages(newPages);
 
-    await Promise.all(newModules.map((m, index) => moveModule(m.id, index)));
+    await Promise.all(newPages.map((p, index) => movePage(p.id, index)));
   };
 
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext
-        items={modulesList.map((m) => m.id)}
+        items={pagesList.map((p) => p.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div className="module-list">
-          {modulesList.map((module) => (
-            <ModuleCard key={module.id} module={module} />
+        <div className="page-list">
+          {pagesList.map((page) => (
+            <LessonPage key={page.id} page={page} />
           ))}
         </div>
       </SortableContext>
     </DndContext>
   );
 }
-export default ModuleList;
+export default PagesList;
