@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import { createPage } from "../../../api/lessons";
+import "../../../styles.css";
 
 const AddPageButton = ({ lessonId, onPageAdded }) => {
   const handleAddPage = async () => {
@@ -15,7 +16,7 @@ const AddPageButton = ({ lessonId, onPageAdded }) => {
   };
 
   return (
-    <Button variant="primary" onClick={handleAddPage}>
+    <Button className="btn-add-page" onClick={handleAddPage}>
       + Add Page
     </Button>
   );

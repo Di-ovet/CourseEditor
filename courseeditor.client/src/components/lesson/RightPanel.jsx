@@ -1,5 +1,5 @@
 import React from "react";
-import "./RightPanel.css";
+import "../../styles.css";
 
 function RightPanel({ lesson, onAction }) {
   const handleAction = (action) => {
@@ -9,8 +9,8 @@ function RightPanel({ lesson, onAction }) {
   };
 
   return (
-    <div className="right-panel">
-      <div className="panel-header">
+    <div className="lesson-right-panel">
+      <div className="right-panel-header">
         <h3>Lesson Actions</h3>
       </div>
 

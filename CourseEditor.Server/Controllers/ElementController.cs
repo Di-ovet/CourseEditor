@@ -17,7 +17,7 @@ public class ElementsController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("page/{pageId}")]
+    [HttpGet("getelements/{pageId}")]
     public async Task<IActionResult> GetElements(Guid pageId)
     {
         var elements = await _db.LessonElements
@@ -38,16 +38,23 @@ public class ElementsController : ControllerBase
     [HttpPost("addelement/{pageId}")]
     public async Task<IActionResult> AddElement(Guid pageId, [FromBody] CreateElementRequest request)
     {
-        var id = await _service.AddElement(pageId, request.Type, request.Data);
-        return Ok(id);
+        try
+        {
+            var id = await _service.AddElement(pageId, request.Type, request.Data, request.OrderIndex);
+            return Ok(id);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-
+    /*
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateData(Guid id, [FromBody] CreateElementRequest request)
     {
         await _service.UpdateElementData(id, request.Data);
         return Ok();
-    }
+    }*/
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
@@ -80,5 +87,15 @@ public class ElementsController : ControllerBase
 
         return Ok();
     }
+    [HttpDelete("deleteelement/{id}")]
+    public async Task<IActionResult> DeleteElement(Guid id)
+    {
+        var element = await _db.LessonElements.FindAsync(id);
+        if (element == null) return NotFound();
 
+        _db.LessonElements.Remove(element);
+        await _db.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

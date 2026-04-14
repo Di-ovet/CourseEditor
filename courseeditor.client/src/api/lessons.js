@@ -7,7 +7,16 @@ const ELEMENTS_API = "/api/elements";
 // ===== Pages =====
 export async function getPages(lessonId) {
   const res = await axios.get(`${PAGES_API}/getpages/${lessonId}`);
-  return res.data;
+  const pages = res.data;
+
+  await Promise.all(
+    pages.map(async (page) => {
+      const elements = await getElements(page.id);
+      page.elements = elements;
+    }),
+  );
+
+  return pages;
 }
 
 export async function createPage(lessonId, title) {
@@ -30,24 +39,37 @@ export async function movePage(pageId, newOrderIndex) {
   );
   return res.data;
 }
-
-// ===== Elements =====
-export async function getElements(pageId) {
-  const res = await axios.get(`${ELEMENTS_API}/page/${pageId}`);
+export async function deletePage(pageId) {
+  const res = await axios.delete(`${PAGES_API}/${pageId}`);
+  return res.data;
+}
+export async function editPageTitle(pageId, newTitle) {
+  const res = await axios.put(`${PAGES_API}/editpagetitle/${pageId}`, {
+    id: pageId,
+    Title: newTitle,
+  });
   return res.data;
 }
 
-export async function addElement(pageId, type, data) {
+// ===== Elements =====
+export async function getElements(pageId) {
+  const res = await axios.get(`${ELEMENTS_API}/getelements/${pageId}`);
+  return res.data;
+}
+
+export async function addElement(pageId, type, data, order) {
   const res = await axios.post(`${ELEMENTS_API}/addelement/${pageId}`, {
     Type: type,
-    Data: data,
+    Data: JSON.stringify(data),
+    OrderIndex: order,
   });
   return res.data;
 }
 
 export async function updateElement(elementId, data) {
   const res = await axios.put(`${ELEMENTS_API}/update/${elementId}`, {
-    Data: data,
+    Type: null,
+    Data: JSON.stringify(data),
   });
   return res.data;
 }
@@ -69,6 +91,18 @@ export async function moveElement(elementId, newOrderIndex) {
   );
   return res.data;
 }
+
+export function getDefaultData(type) {
+  switch (type) {
+    case "Text":
+      return { text: "New text" };
+    case "Image":
+      return { url: "", caption: "" };
+    default:
+      return {};
+  }
+}
+
 export async function editLesson(lessonId, newtitle) {
   const res = await axios.put(`${LESSON_API}/edittitle/${lessonId}`, {
     id: lessonId,

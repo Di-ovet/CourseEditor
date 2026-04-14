@@ -39,7 +39,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost("delete/{id}")]
-    public async Task<IActionResult> Delete(Guid id, [FromBody] CreateCourseDto dto)
+    public async Task<IActionResult> Delete(Guid id)
     {
         var course = await _db.Courses.FindAsync(id);
         if (course == null) return NotFound(); 

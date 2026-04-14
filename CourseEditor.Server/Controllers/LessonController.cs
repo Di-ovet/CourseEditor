@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 public class LessonController : ControllerBase
 {
     private readonly AppDbContext _db;
-
+    //
     public LessonController(AppDbContext db)
     {
         _db = db;

@@ -33,6 +33,10 @@ namespace CourseEditor.Domain.Entities
         {
             OrderIndex = order;
         }
+        public void UpdateTitle(string title)
+        {
+            Title = title;
+        }
         public void MoveElement(Guid elementId, int newIndex)
         {
             var page = _elements.Find(m => m.Id == elementId);

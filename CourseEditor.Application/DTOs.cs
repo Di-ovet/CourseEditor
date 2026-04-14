@@ -1,27 +1,20 @@
 ﻿using CourseEditor.Domain.Enums;
+using System.Text.Json;
 
 namespace CourseEditor.Application;
-public interface IElementData { }
 
-public class TextData : IElementData
-{
-    public string Text { get; set; }
-}
-
-public class ImageData : IElementData
-{
-    public string Url { get; set; }
-    public string Caption { get; set; }
-}
 public class CreateElementRequest
 {
     public ElementType Type { get; set; }
-    public IElementData Data { get; set; } // goes to serializer
+    public string Data { get; set; }
+    public int OrderIndex { get; set; }
+
 }
 
 public class UpdateElementRequest
 {
-    public IElementData Data { get; set; }
+    public string Data { get; set; }
+
 }
 public class CreateCourseDto
 {

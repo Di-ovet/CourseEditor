@@ -24,11 +24,11 @@ public class PageController : ControllerBase
             {
                 p.Id,
                 p.Title,
-                p.OrderIndex
+                p.OrderIndex,
+                elements = new List<object>()
             })
             .ToListAsync();
         if (pages.Count == 0) { return NotFound("No pages."); }
-
         return Ok(pages);
     }
         
@@ -60,24 +60,26 @@ public class PageController : ControllerBase
 
         return Ok(page.Id);
     }
-
-
-    [HttpPost("movepage/{id}")]
-    public async Task<IActionResult> MovePage(Guid id, [FromBody] int newOrderIndex)
+ 
+    [HttpDelete("deletepage/{pageId}")]
+    public async Task<IActionResult> DeletePage(Guid pageId)
     {
-        var page = await _db.LessonPages.FindAsync(id);
+        var page = await _db.LessonPages.FindAsync(pageId);
         if (page == null) return NotFound();
 
-        var lesson = await _db.Lessons
-            .Include(l => l.Pages)
-            .FirstOrDefaultAsync(l => l.Id == page.LessonId);
-
-        if ( lesson == null) return NotFound();
-
-        lesson.MovePage(id, newOrderIndex);
-
+        _db.LessonPages.Remove(page);
         await _db.SaveChangesAsync();
 
-        return Ok();
+        return NoContent();
+    }
+    [HttpPut("editpagetitle/{pageId}")]
+    public async Task<IActionResult> EditPageTitle(Guid pageId, [FromBody] UpdateTitleDto dto)
+    {
+        if (dto == null) return BadRequest("Body is required.");
+        var page = await _db.LessonPages.FindAsync(pageId);
+        if (page == null) return NotFound();
+        page.UpdateTitle(dto.Title);
+        await _db.SaveChangesAsync();
+        return Ok(dto.Title);
     }
 }

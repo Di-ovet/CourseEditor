@@ -1,6 +1,7 @@
 using CourseEditor.Application;
 using CourseEditor.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IElementRepository, ElementRepository>();
-builder.Services.AddScoped<IElementDataSerializer, JsonElementSerializer>();
 builder.Services.AddScoped<ElementService>();
 
 
 // Add controllers
 builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
 
 var app = builder.Build();
 

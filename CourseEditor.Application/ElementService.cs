@@ -1,39 +1,31 @@
 ﻿using CourseEditor.Application;
 using CourseEditor.Domain.Enums;
+using System.Text.Json;
 namespace CourseEditor.Application;
 
 public class ElementService
 {
     private readonly IElementRepository _repo;
-    private readonly IElementDataSerializer _serializer;
+   
 
-    public ElementService(IElementRepository repo, IElementDataSerializer serializer)
+    public ElementService(IElementRepository repo)
     {
         _repo = repo;
-        _serializer = serializer;
     }
 
-    public async Task<Guid> AddElement(Guid pageId, ElementType type, IElementData dto)
+    public async Task<LessonElement> AddElement(Guid pageId, ElementType type, string json, int order)
     {
-        var page = await _repo.GetPageWithElements(pageId);
-        if (page == null) throw new Exception("Page not found");
+        var element = new LessonElement(pageId, type, json, order);
 
-        var json = _serializer.Serialize(dto);
-
-        var element = page.AddElement(type, json);
-
+        await _repo.AddAsync(element);
         await _repo.SaveChangesAsync();
 
-        return element.Id;
+        return element;
     }
 
-    public async Task UpdateElementData(Guid elementId, IElementData dto)
+    public async Task UpdateElementData(Guid elementId, string json)
     {
-        var element = await _repo.GetByIdAsync(elementId);
-        if (element == null) throw new Exception("Element not found");
-
-        var json = _serializer.Serialize(dto);
-
+        var element = await _repo.GetByIdAsync(elementId) ?? throw new Exception("Element not found");
         element.SetData(json);
 
         await _repo.SaveChangesAsync();
