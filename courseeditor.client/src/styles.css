@@ -2,7 +2,9 @@ body {
   margin: 0;
   font-family: "Segoe UI", system-ui, sans-serif;
 }
-
+body.dragging {
+  cursor: grabbing;
+}
 html,
 body,
 #root {
@@ -247,13 +249,30 @@ body,
   align-items: center;
   margin-bottom: 15px;
   border-bottom: 1px solid #e6ebf5;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
+  gap: 20px;
 }
 
-.module-title {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1f2933;
+.module-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.module-controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.lesson-count {
+  font-size: 0.85rem;
+  color: #475569;
+  background: #f0f4ff;
+  padding: 6px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
 }
 
 .module-title-input {
@@ -283,12 +302,36 @@ body,
   border: 2px solid #2d6df6 !important;
 }
 
-.module-tools {
-  font-size: 0.85rem;
-  color: #475569;
-  background: #f0f4ff;
+.drag-handle {
+  cursor: grab;
+  color: #8892a6;
+  font-size: 1.2rem;
   padding: 4px 8px;
-  border-radius: 12px;
+  transition: color 0.2s;
+}
+
+.drag-handle:hover {
+  color: #2d6dfa;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.delete-module-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+
+.delete-module-btn:hover {
+  color: white;
+  background: #ef4444;
 }
 
 .create-module-btn {
@@ -338,11 +381,65 @@ body,
 
 .lesson-list {
   display: flex;
-  flex-direction: row;
-  gap: 12px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
   padding: 12px 0;
   margin-top: 12px;
+}
+
+.lesson-card {
+  background: #ffffff;
+  border-left: 4px solid #6b6bff;
+  border: 1px solid #d0d8e8;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.lesson-card:hover {
+  box-shadow: 0 4px 12px rgba(107, 107, 255, 0.15);
+  transform: translateY(-2px);
+  border-left-color: #5757d9;
+}
+
+.lesson-title-handle {
+  flex: 1;
+  font-size: 14px;
+  color: #1f2933;
+  cursor: grab;
+  user-select: none;
+}
+
+.lesson-title-handle:active {
+  cursor: grabbing;
+}
+
+.edit-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: #6b6bff;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.edit-btn:hover {
+  background: #5757d9;
+  transform: translateY(-1px);
 }
 
 .lesson-item {
@@ -369,6 +466,17 @@ body,
   box-shadow: 0 4px 12px rgba(107, 107, 255, 0.15);
   transform: translateY(-2px);
   border-left-color: #5757d9;
+}
+.elements-container {
+  transition: background 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.elements-container.drop-active {
+  background: rgba(100, 150, 255, 0.08);
+  outline: 2px dashed #7aa2ff;
 }
 .elements-list {
   flex: 1;
@@ -690,6 +798,12 @@ body,
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 6px;
+  direction: ltr;
+  text-align: left;
+}
+
+.page-title {
+  outline: none;
 }
 .btn-add-page {
   padding: 10px 16px;
@@ -728,7 +842,7 @@ body,
   position: absolute;
   top: 8px;
   right: 8px;
-  background: #6b6bff;
+  background: #1f5ce0;
   color: white;
   border: none;
   border-radius: 6px;
@@ -741,11 +855,12 @@ body,
 }
 
 .element-options-btn:active {
-  cursor: grabbing;
+  cursor: pointer;
 }
 
 .element-options-btn:hover {
-  background: #5757d9;
+  background: #1f5ce0;
+  cursor: pointer;
 }
 
 .element-text,

@@ -48,13 +48,13 @@ public class ElementsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    /*
+    
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateData(Guid id, [FromBody] CreateElementRequest request)
+    public async Task<IActionResult> UpdateData(Guid id, [FromBody] UpdateElementRequest request)
     {
         await _service.UpdateElementData(id, request.Data);
-        return Ok();
-    }*/
+        return Ok(request);
+    }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
@@ -87,7 +87,7 @@ public class ElementsController : ControllerBase
 
         return Ok();
     }
-    [HttpDelete("deleteelement/{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteElement(Guid id)
     {
         var element = await _db.LessonElements.FindAsync(id);

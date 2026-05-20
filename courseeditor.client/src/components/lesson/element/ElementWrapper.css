@@ -1,0 +1,85 @@
+.element-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+  padding-top: 28px;
+}
+
+.element-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  z-index: 10;
+}
+
+.element-options-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 6px;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.element-options-btn:hover {
+  color: #333;
+}
+
+.element-options-btn:active {
+  color: #333;
+}
+
+.element-context-menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  min-width: 120px;
+  margin-top: 0;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.menu-item.move-up:hover,
+.menu-item.move-down:hover {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.menu-item.duplicate:hover {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.menu-item.delete:hover {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.menu-item:first-child {
+  border-radius: 4px 4px 0 0;
+}
+
+.menu-item:last-child {
+  border-radius: 0 0 4px 4px;
+}

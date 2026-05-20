@@ -2,7 +2,7 @@ import LessonCard from "./LessonCard";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
-  horizontalListSortingStrategy,
+  verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
 import { moveLesson } from "../../api/courses";
@@ -37,7 +37,7 @@ function LessonList({ lessons, setLessons }) {
 
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={lessons} strategy={horizontalListSortingStrategy}>
+      <SortableContext items={lessons} strategy={verticalListSortingStrategy}>
         <div className="lesson-list">
           {lessons.map((l) => (
             <LessonCard key={l.id} lesson={l} />

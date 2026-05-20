@@ -38,6 +38,10 @@ function ModuleList({ modules, setModules }) {
     await Promise.all(newModules.map((m, index) => moveModule(m.id, index)));
   };
 
+  const handleDeleteModule = (moduleId) => {
+    setModules((prev) => prev.filter((m) => m.id !== moduleId));
+  };
+
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext
@@ -46,7 +50,11 @@ function ModuleList({ modules, setModules }) {
       >
         <div className="module-list">
           {modulesList.map((module) => (
-            <ModuleCard key={module.id} module={module} />
+            <ModuleCard
+              key={module.id}
+              module={module}
+              onDelete={handleDeleteModule}
+            />
           ))}
         </div>
       </SortableContext>

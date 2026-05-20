@@ -22,6 +22,7 @@ function LessonEditor() {
   const location = useLocation();
   const lesson = location.state?.lesson;
   const navigate = useNavigate();
+  const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(true);
   const [pages, setPages] = useState([]);
   const [elements, setElements] = useState([]);
@@ -58,6 +59,9 @@ function LessonEditor() {
     }
     setLoading(false);
   }, [lesson, navigate]);
+  useEffect(() => {
+    document.body.classList.toggle("dragging", isDragging);
+  }, [isDragging]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -82,11 +86,10 @@ function LessonEditor() {
     const { active, over } = event;
     console.log("Drag ended. Active:", active, "Over:", over);
     if (!over) return;
-
     const data = active.data.current;
     const overData = over.data.current;
     console.log("Active data:", data, "Over data:", overData);
-    if (data?.type === "tool") {
+    if (data?.type === "tool" && overData?.type === "page") {
       const elementType = data.elementType;
       const pageid = over.id.replace("page-", "");
       console.log("Adding element of type:", elementType, "to page:", pageid);
@@ -132,7 +135,10 @@ function LessonEditor() {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
+      onDragEnd={(e) => {
+        setIsDragging(false);
+        handleDragEnd(e);
+      }}
     >
       <div className="editor-layout">
         <LeftPanel onBack={handleBack} />

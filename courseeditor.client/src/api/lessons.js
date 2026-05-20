@@ -66,16 +66,16 @@ export async function addElement(pageId, type, data, order) {
   return res.data;
 }
 
-export async function updateElement(elementId, data) {
+export async function updateElement(elementId, type, data) {
   const res = await axios.put(`${ELEMENTS_API}/update/${elementId}`, {
-    Type: null,
+    Type: type,
     Data: JSON.stringify(data),
   });
   return res.data;
 }
 
 export async function deleteElement(elementId) {
-  const res = await axios.delete(`${ELEMENTS_API}/${elementId}`);
+  const res = await axios.delete(`${ELEMENTS_API}/delete/${elementId}`);
   return res.data;
 }
 

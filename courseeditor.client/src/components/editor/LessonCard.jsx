@@ -16,11 +16,13 @@ function LessonCard({ lesson }) {
   };
 
   return (
-    <div className="lesson-item">
+    <div
+      className="lesson-card"
+      ref={setNodeRef}
+      style={style}
+    >
       <div
-        className="lesson-title"
-        ref={setNodeRef}
-        style={style}
+        className="lesson-title-handle"
         {...attributes}
         {...listeners}
       >

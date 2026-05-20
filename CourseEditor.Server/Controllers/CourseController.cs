@@ -26,11 +26,10 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost("edit/{id}")]
-    public async Task<IActionResult> Edit(Guid id, [FromBody] CreateCourseDto dto)
+        public async Task<IActionResult> Edit(Guid id, [FromBody] CreateCourseDto dto)
     {
         var course = await _db.Courses.FindAsync(id);
-
-        if (course == null) return NotFound();
+        if (course is null) return NotFound();
         
         course.Edit(dto.Title, dto.Description);
         await _db.SaveChangesAsync();
@@ -42,7 +41,7 @@ public class CourseController : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         var course = await _db.Courses.FindAsync(id);
-        if (course == null) return NotFound(); 
+        if (course is null) return NotFound(); 
 
         _db.Courses.Remove(course);
         await _db.SaveChangesAsync();
@@ -64,7 +63,7 @@ public class CourseController : ControllerBase
     {
         var course = await _db.Courses.FindAsync(id);
 
-        if (course == null) return NotFound();
+        if (course is null) return NotFound();
 
         return Ok(course);
     }

@@ -7,6 +7,17 @@ function ElementRenderer({ element, onChange }) {
     return <div>Unknown element type: {element.elementType}</div>;
   }
 
-  return <Component id={element.id} data={element.data} onChange={onChange} />;
+  // Parse data if it's a JSON string
+  let parsedData = element.data;
+  if (typeof element.data === "string") {
+    try {
+      parsedData = JSON.parse(element.data);
+    } catch (e) {
+      console.error("Failed to parse element data:", e);
+      parsedData = {};
+    }
+  }
+
+  return <Component id={element.id} data={parsedData} onChange={onChange} />;
 }
 export default ElementRenderer;

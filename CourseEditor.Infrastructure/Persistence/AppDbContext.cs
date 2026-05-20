@@ -14,5 +14,30 @@ namespace CourseEditor.Infrastructure.Persistence
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Module -> Lesson (cascade delete)
+            modelBuilder.Entity<Module>()
+                .HasMany(m => m.Lessons)
+                .WithOne()
+                .HasForeignKey(l => l.ModuleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Lesson -> LessonPage (cascade delete)
+            modelBuilder.Entity<Lesson>()
+                .HasMany(l => l.Pages)
+                .WithOne()
+                .HasForeignKey(p => p.LessonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // LessonPage -> LessonElement (cascade delete)
+            modelBuilder.Entity<LessonPage>()
+                .HasMany(p => p.Elements)
+                .WithOne()
+                .HasForeignKey(e => e.PageId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

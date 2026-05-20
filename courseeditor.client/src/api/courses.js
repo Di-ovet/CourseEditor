@@ -93,3 +93,8 @@ export async function moveLesson(lessonId, newOrderIndex) {
   );
   return res.data;
 }
+
+export async function deleteModule(moduleId) {
+  const res = await axios.delete(`${API}/deletemodule/${moduleId}`);
+  return res.data;
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const elementRegistry = {
   Text: TextElement,
@@ -8,78 +8,76 @@ const elementRegistry = {
 export { elementRegistry };
 
 function TextElement({ id, data, onChange }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [text, setText] = useState(data?.text || "");
 
-  const handleChange = (e) => {
-    const updatedData = { ...data, text: e.target.value };
-    onChange(updatedData);
+  useEffect(() => {
+    setText(data?.text || "");
+  }, [data]);
+
+  const handleBlur = () => {
+    if (text !== data?.text) {
+      onChange({ ...data, text });
+    }
   };
 
   return (
-    <div
-      className="element-text"
-      onDoubleClick={() => setIsEditing(true)}
-      onBlur={() => setIsEditing(false)}
-      tabIndex="0"
-    >
-      {isEditing ? (
-        <textarea
-          autoFocus
-          value={data?.text || ""}
-          onChange={handleChange}
-          className="element-textarea"
-        />
-      ) : (
-        <p>{data?.text || "(пусто)"}</p>
-      )}
+    <div className="element-text">
+      <textarea
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={handleBlur}
+        className="element-textarea"
+        placeholder="Введите текст..."
+      />
     </div>
   );
 }
 export { TextElement };
 
 function ImageElement({ id, data, onChange }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [url, setUrl] = useState(data?.url || "");
+  const [caption, setCaption] = useState(data?.caption || "");
 
-  const handleUrlChange = (e) => {
-    const updatedData = { ...data, url: e.target.value };
-    onChange(updatedData);
+  useEffect(() => {
+    setUrl(data?.url || "");
+    setCaption(data?.caption || "");
+  }, [data]);
+
+  const handleUrlBlur = () => {
+    if (url !== data?.url) {
+      onChange({ ...data, url });
+    }
   };
 
-  const handleCaptionChange = (e) => {
-    const updatedData = { ...data, caption: e.target.value };
-    onChange(updatedData);
+  const handleCaptionBlur = () => {
+    if (caption !== data?.caption) {
+      onChange({ ...data, caption });
+    }
   };
 
   return (
-    <div
-      className="element-image"
-      onDoubleClick={() => setIsEditing(true)}
-      onBlur={() => setIsEditing(false)}
-      tabIndex="0"
-    >
-      {isEditing ? (
-        <div className="element-image-edit">
-          <input
-            autoFocus
-            type="text"
-            placeholder="URL изображения"
-            value={data?.url || ""}
-            onChange={handleUrlChange}
-          />
-          <input
-            type="text"
-            placeholder="Описание"
-            value={data?.caption || ""}
-            onChange={handleCaptionChange}
-          />
+    <div className="element-image">
+      <div className="element-image-edit">
+        <input
+          type="text"
+          placeholder="URL изображения"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          onBlur={handleUrlBlur}
+        />
+        <input
+          type="text"
+          placeholder="Описание"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          onBlur={handleCaptionBlur}
+        />
+      </div>
+      {url && (
+        <div className="element-image-preview">
+          <img src={url} alt={caption || "Изображение"} />
+          {caption && <p>{caption}</p>}
         </div>
-      ) : data?.url ? (
-        <>
-          <img src={data.url} alt={data.caption || "Image"} />
-          {data.caption && <p>{data.caption}</p>}
-        </>
-      ) : (
-        <p>Нет изображения</p>
       )}
     </div>
   );

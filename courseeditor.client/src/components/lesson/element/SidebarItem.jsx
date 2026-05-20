@@ -1,20 +1,26 @@
 import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 function SidebarItem({ elementType, label }) {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id: `tool-${elementType}`, // MUST be unique
-    data: {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useDraggable({
+      id: `tool-${elementType}`, // MUST be unique
       type: "tool",
-      elementType: elementType,
-    },
-  });
-
+      data: {
+        type: "tool",
+      },
+    });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   return (
     <div
       ref={setNodeRef}
+      className="sidebar-item"
+      style={style}
       {...listeners}
       {...attributes}
-      className="sidebar-item"
     >
       {label}
     </div>
